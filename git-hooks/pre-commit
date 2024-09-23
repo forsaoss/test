@@ -1,0 +1,28 @@
+#!/bin/bash
+exit 0
+# Send all output to stderr
+exec 1>&2
+
+echo yo
+
+# Get the branch we're on.
+b=$(git rev-parse --abbrev-ref=strict HEAD)
+
+# 'true' is a shell built-in command that always exits zero.
+# 'false is a shell built-in command that always exists non-zero.
+ok=true # assume the best :)
+case "$b" in
+	main|master) ok=false;;
+	*);;
+esac
+
+if ! $ok ; then
+	echo
+	echo "You are not allowed to commit directly to the $b branch."
+	echo "Please use another branch."
+	echo
+fi
+
+# Exit status of this script is zero or non zero depending on whether $ok is
+# true or false per above.
+$ok
